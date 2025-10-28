@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Say Hello Server Configuration",
+  "description": "Configuration options for the Say Hello MCP server",
+  "type": "object",
+  "properties": {
+    "debug": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable debug logging for troubleshooting and development. When enabled, tool outputs will include DEBUG: prefix.",
+      "examples": [false, true]
+    }
+  },
+  "additionalProperties": false,
+  "required": []
+}

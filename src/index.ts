@@ -1,9 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 
-// Optional: If you have user-level config, define it here
+// Configuration schema with detailed documentation
 export const configSchema = z.object({
-	debug: z.boolean().default(false).describe("Enable debug logging"),
+	debug: z.boolean()
+		.default(false)
+		.describe("Enable debug logging for troubleshooting and development. When enabled, tool outputs will include DEBUG: prefix."),
 })
 
 export default function createServer({
@@ -14,6 +16,7 @@ export default function createServer({
 	const server = new McpServer({
 		name: "Say Hello",
 		version: "1.0.0",
+		icon: "icon.svg",
 	})
 
 	// Add a tool
@@ -32,6 +35,18 @@ export default function createServer({
 				}
 			],
 		}),
+		{
+			annotations: [
+				{
+					type: "usage",
+					text: "Use this tool to greet users by name. Perfect for welcoming new users or acknowledging someone in a conversation."
+				},
+				{
+					type: "example",
+					text: "Example: Call hello with name='Alice' to greet Alice with 'Hello, Alice!'"
+				}
+			]
+		}
 	)
 
 	// Add a resource
