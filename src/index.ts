@@ -11,8 +11,11 @@ export const configSchema = z.object({
 export default function createServer({
 	config,
 }: {
-	config: z.infer<typeof configSchema> // your server configuration
+	config?: z.infer<typeof configSchema> // your server configuration (optional)
 }) {
+	// Parse and validate config with defaults
+	const validatedConfig = configSchema.parse(config || {})
+	
 	const server = new McpServer({
 		name: "Say Hello",
 		version: "1.0.0",
@@ -26,27 +29,20 @@ export default function createServer({
 			title: "Hello Tool",
 			description: "Say hello to someone",
 			inputSchema: { name: z.string().describe("Name to greet") },
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+				idempotentHint: true
+			}
 		},
 		async ({ name }) => ({
 			content: [
 				{ 
 					type: "text", 
-					text: config.debug ? `DEBUG: Hello ${name}` : `Hello, ${name}!` // use provided config
+					text: validatedConfig.debug ? `DEBUG: Hello ${name}` : `Hello, ${name}!` // use validated config
 				}
 			],
-		}),
-		{
-			annotations: [
-				{
-					type: "usage",
-					text: "Use this tool to greet users by name. Perfect for welcoming new users or acknowledging someone in a conversation."
-				},
-				{
-					type: "example",
-					text: "Example: Call hello with name='Alice' to greet Alice with 'Hello, Alice!'"
-				}
-			]
-		}
+		})
 	)
 
 	// Add a resource
